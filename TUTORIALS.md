@@ -140,11 +140,13 @@ cd smallnetflix/
 wget http://www.select.cs.cmu.edu/code/graphlab/datasets/smallnetflix_mm.train
 wget http://www.select.cs.cmu.edu/code/graphlab/datasets/smallnetflix_mm.validate
 ```
+
 Now run GraphLab:
 
-````
+```
 mpiexec -n 2 -hostfile ~/machines /path/to/als  --matrix /some/ns/folder/smallnetflix/ --max_iter=3 --ncpus=1 --minval=1 --maxval=5 --predictions=out_file
 ```
+
 Where -n is the number of MPI nodes, and –ncpus is the number of deployed cores on each MPI node.
 
 machines is a file which includes a list of the machines you like to deploy on (each machine in a new line)
