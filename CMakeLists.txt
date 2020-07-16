@@ -68,7 +68,7 @@ endif()
 
 
 # Shared compiler flags used by all builds (debug, profile, release)
-set(COMPILER_FLAGS "-Wall -g ${CPP11_FLAGS} ${OPENMP_C_FLAGS}" CACHE STRING "common compiler options")
+set(COMPILER_FLAGS "-W -g ${CPP11_FLAGS} ${OPENMP_C_FLAGS}" CACHE STRING "common compiler options")
 
 # Disable address space randomization for OSX lion and above
 if (APPLE)
@@ -203,6 +203,7 @@ ExternalProject_Add(boost
   ./b2 install link=static variant=release threading=multi runtime-link=static
   INSTALL_COMMAND ""
   INSTALL_DIR ${GraphLab_SOURCE_DIR}/deps/local )
+  
 set(BOOST_ROOT ${GraphLab_SOURCE_DIR}/deps/local )
 set(BOOST_LIBS_DIR ${GraphLab_SOURCE_DIR}/deps/local/lib)
 set(Boost_LIBRARIES
