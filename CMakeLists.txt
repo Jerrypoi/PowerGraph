@@ -387,8 +387,8 @@ endif()
 
 ExternalProject_Add(zookeeper
   PREFIX ${GraphLab_SOURCE_DIR}/deps/zookeeper
-  URL http://mirror.metrocast.net/apache/zookeeper/zookeeper-3.5.1-alpha/zookeeper-3.5.1-alpha.tar.gz
-  URL_MD5 d85f9751724d3f20f792803b61c4db24
+  URL http://mirror.metrocast.net/apache/zookeeper/zookeeper-3.5.8/apache-zookeeper-3.5.8.tar.gz
+  URL_MD5 614cf3499fe16d7e7c6f9c7c88814ef0
   PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${GraphLab_SOURCE_DIR}/patches/zookeeper/ <SOURCE_DIR>
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND ./configure --prefix=<INSTALL_DIR> --disable-shared
@@ -571,7 +571,7 @@ endif()
 #disable Wno-unused-local-typedefs if available
 check_cxx_compiler_flag(-Wno-unused-local-typedefs HAS_WNO_LOCAL_TYPEDEFS)
 if(HAS_WNO_LOCAL_TYPEDEFS)
-  set(WNO_LOCAL_TYPEDEFS "-Wno-unused-local-typedefs")
+  set(WNO_LOCAL_TYPEDEFS "")
 else()
   set(WNO_LOCAL_TYPEDEFS "")
 endif()
