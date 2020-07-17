@@ -146,6 +146,45 @@ public:
 }; // end of factorized_pagerank update functor
 
 
+
+typedef graphlab::empty gather_type;
+class pregel_pagerank : 
+  public ivertex_program<graph_type, gather_type, pagerank_message>,
+  public graphlab::IS_POD_TYPE {
+  // Store a local copy of the message data
+  double message_value;
+  // Receive the inbound message (sum of messages)
+  void init(icontext_type& context, const vertex_type& vertex, 
+            const message_type& msg) { 
+    message_value = message.value;
+  }
+  // Skip the gather phase
+  edge_dir_type gather_edges(icontext_type& context,
+                             const vertex_type& vertex) const { 
+    return graphlab::NO_EDGES; 
+  }
+  // Update the pagerank using the message
+  void apply(icontext_type& context, vertex_type& vertex, 
+             const gather_type& total) {
+    vertex.data() += message_value;      
+  }
+  // Scatter along out edges
+  edge_dir_type scatter_edges(icontext_type& context,
+                              const vertex_type& vertex) const { 
+    return OUT_EDGES; 
+  }
+  // Compute new messages encoding the change in the pagerank of
+  // adjacent vertices.
+  void scatter(icontext_type& context, const vertex_type& vertex, 
+               edge_type& edge) const { 
+    pagerank_message msg;
+    msg.value = message_value * (1 - RESET_PROBABILITY);
+    context.signal(edge.target(), msg);
+  }
+}; 
+
+
+
 /*
  * We want to save the final graph so we define a write which will be
  * used in graph.save("path/prefix", pagerank_writer()) to save the graph.

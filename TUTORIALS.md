@@ -354,10 +354,12 @@ Here is a more detailed explanation of the benchmarking process. The benchmarkin
 5. In case you would like to benchmark a different algorithm, you can add an additional youralgo_demo section into the gl_ec2.py script.
 6. In case you would like to bechmark a regular instance, simply change the following line in gl_ec2.py from
 
-````
+```
 ./gl-ec2 -i ~/.ssh/amazonec2.pem -k amazonec2 -a hpc -s $MAX_SLAVES -t cc2.8xlarge launch hpctest
 ```
+
 to:
+
 ```
 ./gl-ec2 -i ~/.ssh/amazonec2.pem -k amazonec2  -s $MAX_SLAVES -t m1.xlarge launch hpctest
 ```
