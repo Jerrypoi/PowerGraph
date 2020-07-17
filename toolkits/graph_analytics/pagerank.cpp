@@ -146,17 +146,24 @@ public:
 }; // end of factorized_pagerank update functor
 
 
-
+struct pagerank_message : public graphlab::IS_POD_TYPE {
+  double value;
+  double priority() const { return std::fabs(value); }
+  message_type& operator+=(const message_type& other) {
+    value += other.value; 
+    return *this;
+  }
+};
 typedef graphlab::empty gather_type;
 class pregel_pagerank : 
-  public ivertex_program<graph_type, gather_type, pagerank_message>,
+  public graphlab::ivertex_program<graph_type, gather_type, pagerank_message>,
   public graphlab::IS_POD_TYPE {
   // Store a local copy of the message data
   double message_value;
   // Receive the inbound message (sum of messages)
   void init(icontext_type& context, const vertex_type& vertex, 
             const message_type& msg) { 
-    message_value = message.value;
+    message_value = msg.value;
   }
   // Skip the gather phase
   edge_dir_type gather_edges(icontext_type& context,
@@ -171,14 +178,14 @@ class pregel_pagerank :
   // Scatter along out edges
   edge_dir_type scatter_edges(icontext_type& context,
                               const vertex_type& vertex) const { 
-    return OUT_EDGES; 
+    return graphlab::OUT_EDGES; 
   }
   // Compute new messages encoding the change in the pagerank of
   // adjacent vertices.
   void scatter(icontext_type& context, const vertex_type& vertex, 
                edge_type& edge) const { 
     pagerank_message msg;
-    msg.value = message_value * (1 - RESET_PROBABILITY);
+    msg.value = message_value * (1 - RESET_PROB);
     context.signal(edge.target(), msg);
   }
 }; 
